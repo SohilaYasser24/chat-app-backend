@@ -35,16 +35,6 @@ exports.signUp = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    const token = signToken(
-      newUser._id,
-      newUser.firstname,
-      newUser.lastname,
-      newUser.email,
-      newUser.image,
-      newUser.gender,
-      newUser.password
-    );
-
     res.status(201).json({
       status: "Register successfully",
       token,
