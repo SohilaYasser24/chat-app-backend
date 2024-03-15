@@ -34,6 +34,16 @@ exports.signUp = async (req, res, next) => {
       password: hashedPassword,
     });
 
+    const token = signToken(
+      newUser._id,
+      newUser.firstname,
+      newUser.lastname,
+      newUser.email,
+      newUser.image,
+      newUser.gender,
+      newUser.password
+    );
+
     res.status(201).json({
       status: "Register successfully",
       token,
@@ -56,7 +66,7 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(401).json({
-        message: new AppError("User not found", 401),
+        message: "User not found",
       });
     }
 
@@ -69,12 +79,11 @@ exports.login = async (req, res, next) => {
 
     const token = signToken(
       user._id,
-      user.fullName,
+      user.firstname,
+      user.lastname,
       user.email,
       user.image,
-      user.role,
-      user.status,
-      user.phone,
+      user.gender,
       user.password
     );
     res.status(200).json({
