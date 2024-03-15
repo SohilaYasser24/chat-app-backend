@@ -10,6 +10,7 @@ exports.signUp = async (req, res, next) => {
     const { firstname, lastname, email, image, gender, password } = req.body;
 
     const validation = userValidation.validate(req.body);
+    
     if (validation.error) {
       return res.status(400).json({
         message: validation.error.details[0].message,
