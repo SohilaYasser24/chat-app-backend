@@ -10,6 +10,7 @@ exports.signUp = async (req, res, next) => {
     const { firstname, lastname, email, image, gender, password } = req.body;
 
     const validation = userValidation.validate(req.body);
+
     if (validation.error) {
       let errorMessage = "";
       for (const err of validation.error.details) {
@@ -42,6 +43,11 @@ exports.signUp = async (req, res, next) => {
 
     res.status(201).json({
       status: "Registration successfully",
+=======
+      status: "Register successfully",
+      data: {
+        user: newUser,
+      },
     });
     next();
   } catch (error) {
