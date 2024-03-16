@@ -75,9 +75,9 @@ exports.login = async (req, res, next) => {
       user._id,
       user.firstname,
       user.lastname,
-      user.email,
       user.image,
       user.gender,
+      user.email,
       user.password
     );
     res.status(200).json({

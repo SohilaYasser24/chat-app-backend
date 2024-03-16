@@ -1,16 +1,12 @@
 const express = require("express");
+const {
+  setMessages,
+  getMessages,
+} = require("../controllers/messageController");
+const { protect } = require("../middlewares/authMW");
 const router = express.Router();
-const { setMessages, getMessages } = require("../controllers/messageController");
-const {protect} = require("../middlewares/authMW")
 
-
-
-
-
-router.post("/message",setMessages)
-router.get("/messages",getMessages)
-
-
-
+router.post("/", protect, setMessages);
+router.get("/messages", getMessages);
 
 module.exports = router;
