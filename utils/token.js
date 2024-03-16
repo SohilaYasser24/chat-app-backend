@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 
-const signToken = (id, firstname, lastname, gender, email, password) => {
+const signToken = (id, firstname, lastname, image, gender, email, password) => {
   return jwt.sign(
-    { id, firstname, lastname, gender, email, password },
+    { id, firstname, lastname, image, gender, email, password },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_EXPIRES_IN,
