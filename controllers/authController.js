@@ -43,11 +43,6 @@ exports.signUp = async (req, res, next) => {
 
     res.status(201).json({
       status: "Registration successfully",
-=======
-      status: "Register successfully",
-      data: {
-        user: newUser,
-      },
     });
     next();
   } catch (error) {
