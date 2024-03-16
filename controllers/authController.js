@@ -11,8 +11,14 @@ exports.signUp = async (req, res, next) => {
 
     const validation = userValidation.validate(req.body);
     if (validation.error) {
+      let errorMessage = "";
+      for (const err of validation.error.details) {
+        errorMessage += `${err.path.join(" > ")} ${err.message.slice(
+          err.message.lastIndexOf('"') + 1
+        )}`;
+      }
       return res.status(400).json({
-        message: validation.error.details[0].message,
+        message: errorMessage,
       });
     }
 
@@ -35,15 +41,12 @@ exports.signUp = async (req, res, next) => {
     });
 
     res.status(201).json({
-      status: "Register successfully",
-      token,
-      data: {
-        user: newUser,
-      },
+      status: "Registration successfully",
     });
+    next();
   } catch (error) {
     res.status(500).json({
-      message: "Register Failed",
+      message: "Registration Failed",
       error: error.message,
     });
   }
@@ -77,9 +80,10 @@ exports.login = async (req, res, next) => {
       user.password
     );
     res.status(200).json({
-      status: "success",
+      status: "Login successfully",
       token,
     });
+    next();
   } catch (error) {
     res.status(500).json({
       message: "Login Failed",
