@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/", authRoutes);
+app.use("/api/v1/users", authRoutes);
 
 const PORT = process.env.PORT;
 
