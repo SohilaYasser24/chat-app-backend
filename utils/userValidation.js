@@ -15,6 +15,7 @@ const userValidation = Joi.object({
   gender: Joi.string().required().messages({
     "string.empty": "Gender is required",
   }),
+  image: Joi.string(),
   email: Joi.string().email().required().messages({
     "string.empty": "Email is required",
   }),
