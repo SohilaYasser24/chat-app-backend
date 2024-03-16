@@ -19,6 +19,9 @@ exports.protect = async (req, res, next) => {
     req.user = decode;
     next();
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      message: "Authentication failed",
+      error: error.message,
+    });
   }
 };
