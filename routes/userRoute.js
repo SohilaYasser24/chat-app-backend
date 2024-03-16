@@ -1,11 +1,8 @@
 const express = require("express");
-const { getUsers } = require("../controllers/userController");
+const { getAllUsers } = require("../controllers/userController");
+const { protect } = require("../middlewares/authMW");
 const router = express.Router();
 
-
-router.get("/users",getUsers)
-
-
-
+router.get("/fetchAllUsers", protect, getAllUsers);
 
 module.exports = router;
