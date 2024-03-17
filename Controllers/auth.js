@@ -1,6 +1,6 @@
 const User = require("../Models/User");
 const signToken = require("../Utils/signToken");
-const { userValidation } = require("../validators");
+const { userValidation } = require("../Validators/user");
 const bcrypt = require("bcryptjs");
 
 exports.signUp = async (req, res, next) => {
