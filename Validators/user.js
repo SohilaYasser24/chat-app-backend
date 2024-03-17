@@ -7,7 +7,7 @@ const userValidation = Joi.object({
     "string.min": "First name must have at least {#limit} characters",
     "string.max": "First name must have at most {#limit} characters",
   }),
-  lastname: Joi.string().min(3).max(12).messages({
+  lastname: Joi.string().min(3).max(12).allow("").messages({
     "string.base": "Last name must be a string",
     "string.min": "Last name must have at least {#limit} characters",
     "string.max": "Last name must have at most {#limit} characters",
