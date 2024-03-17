@@ -12,7 +12,9 @@ const userValidation = Joi.object({
     "string.min": "Last name must have at least {#limit} characters",
     "string.max": "Last name must have at most {#limit} characters",
   }),
-  image: Joi.string(),
+  image: Joi.string().default(" ").allow("").messages({
+    "string.base": "Image must be a string",
+  }),
   email: Joi.string().email().required().messages({
     "string.empty": "Email is required",
   }),
