@@ -1,13 +1,10 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+const { DatabaseURL, DB_NAME } = require("./constants");
 
-
-const URL = process.env.URL_DATABASE;
-const DB_NAME = process.env.DB_NAME_MONGO_ATLAS;
+const mongoose = require("mongoose");
 
 const connect = () => {
   const connectDB = mongoose
-    .connect(URL, { dbName: DB_NAME })
+    .connect(DatabaseURL, { dbName: DB_NAME })
     .then(() => {
       console.log("Connect to DB is successfully");
     })
