@@ -12,10 +12,9 @@ const getChats = async (req, res, next) => {
         message: "User Not Found",
       });
 
-    const chat = await Chat.find({ members: id }, "-__v").populate(
-      "members",
-      "_id email firstname lastname"
-    );
+    const chat = await Chat.find({ members: id }, "-__v")
+      .populate("members", "_id email firstname lastname")
+      .populate("latestMessage", "content");
     // console.log(chat);
     if (!chat.length) return res.status(204).json();
 
@@ -73,9 +72,11 @@ const createGroup = async (req, res, next) => {
 
 const getGroups = async (req, res, next) => {
   try {
-    const groups = await Chat.where("isGroup").equals(true);
+    const groups = await Chat.where("isGroup")
+      .equals(true)
+      .populate("members", "_id email firstname lastname")
+      .populate("latestMessage", "content");
     res.status(200).json({
-      message: "done",
       groups,
     });
   } catch (error) {
