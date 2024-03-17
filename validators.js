@@ -12,9 +12,6 @@ const userValidation = Joi.object({
     "string.min": "Last name must have at least {#limit} characters",
     "string.max": "Last name must have at most {#limit} characters",
   }),
-  gender: Joi.string().required().messages({
-    "string.empty": "Gender is required",
-  }),
   image: Joi.string(),
   email: Joi.string().email().required().messages({
     "string.empty": "Email is required",
@@ -33,12 +30,8 @@ const messageValidation = Joi.object({
   content: Joi.string().required().messages({
     "string.empty": "Content is required",
   }),
-  sender: Joi.object().required().messages({
-    "string.empty": "Sender is required",
-  }),
-  chat: Joi.object().required().messages({
-    "string.empty": "Chat is required",
-  }),
+  sender: Joi.object().required(),
+  chat: Joi.object().required(),
   createdAt: Joi.date().required(),
   _id: Joi.object().required(),
 });

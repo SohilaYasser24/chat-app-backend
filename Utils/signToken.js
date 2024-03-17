@@ -2,9 +2,9 @@ const { JwtSecret, expireDateToken } = require("../constants");
 
 const jwt = require("jsonwebtoken");
 
-const signToken = (id, firstname, lastname, image, gender, email, password) => {
+const signToken = (id, firstname, lastname, image, email, password) => {
   return jwt.sign(
-    { id, firstname, lastname, image, gender, email, password },
+    { id, firstname, lastname, image, email, password },
     JwtSecret,
     {
       expiresIn: expireDateToken,

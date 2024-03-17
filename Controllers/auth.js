@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 
 exports.signUp = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, image, gender, password } = req.body;
+    const { firstname, lastname, email, image, password } = req.body;
 
     const validation = userValidation.validate(req.body);
 
@@ -35,7 +35,6 @@ exports.signUp = async (req, res, next) => {
       lastname: lastname,
       email: email,
       image: image,
-      gender: gender,
       password: hashedPassword,
     });
 
@@ -74,7 +73,6 @@ exports.login = async (req, res, next) => {
       user.firstname,
       user.lastname,
       user.image,
-      user.gender,
       user.email,
       user.password
     );
