@@ -45,7 +45,7 @@ const setMessages = async (req, res, next) => {
     newMessage = await Message.populate("chat");
     newMessage = await User.populate(newMessage, {
       path: "chat.members",
-      select: "name",
+      select: "firstname lastname",
     });
 
     await Chat.findByIdAndUpdate(req.body.chatId, {
