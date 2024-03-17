@@ -27,8 +27,31 @@ const userValidation = Joi.object({
         "Password must between 8-16 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character",
       "any.required": "Password is required",
     }),
-  createdAt: Joi.date(),
-  updatedAt: Joi.date(),
 });
 
-module.exports = { userValidation };
+const messageValidation = Joi.object({
+  content: Joi.string().required().messages({
+    "string.empty": "Content is required",
+  }),
+  sender: Joi.object().required().messages({
+    "string.empty": "Sender is required",
+  }),
+  chat: Joi.object().required().messages({
+    "string.empty": "Chat is required",
+  }),
+  createdAt: Joi.date().required(),
+  _id: Joi.object().required(),
+});
+
+const chatValidation = Joi.object({
+  name: Joi.string().required().messages({
+    "string.empty": "Name is required",
+  }),
+  members: Joi.array().required().messages({
+    "string.empty": "Members is required",
+  }),
+  isGroup: Joi.boolean().required(),
+  _id: Joi.required(),
+});
+
+module.exports = { userValidation, messageValidation, chatValidation };
