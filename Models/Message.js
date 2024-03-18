@@ -13,10 +13,6 @@ const Message = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // reciver: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    // },
     chat: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Chat",

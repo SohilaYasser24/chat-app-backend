@@ -34,7 +34,7 @@ const getMessages = async (req, res, next) => {
 
 const setMessages = async (req, res, next) => {
   try {
-    const { content, chatId, userId } = req.body;
+    const { content, chatId } = req.body;
 
     const validation = messageValidation.validate(req.body);
 
@@ -50,19 +50,10 @@ const setMessages = async (req, res, next) => {
       });
     }
 
-    // if (userId && !chatId) {
-    //   const chat = await Chat.create({
-    //     name: "test",
-    //     isGroup: false,
-    //     members: userId,
-    //   });
-    // }
-
     let newMessage = await Message.create({
       sender: req.user._id,
       content: content,
       chat: chatId,
-      // reciver: userId,
     });
 
     await Chat.findByIdAndUpdate(req.body.chatId, {
