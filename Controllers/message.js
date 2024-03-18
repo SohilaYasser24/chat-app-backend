@@ -33,27 +33,39 @@ const getMessages = async (req, res, next) => {
 
 const setMessages = async (req, res, next) => {
   try {
-    const { content, chatId } = req.body;
+    const { content, chatId, userId } = req.body;
+
+    // if (userId && !chatId) {
+    //   const chat = await Chat.create({
+    //     name: "test",
+    //     isGroup: false,
+    //     members: userId,
+    //   });
+    // }
 
     let newMessage = await Message.create({
       sender: req.user._id,
       content: content,
       chat: chatId,
-    });
-
-    newMessage = await Message.populate("sender");
-    newMessage = await Message.populate("chat");
-    newMessage = await User.populate(newMessage, {
-      path: "chat.members",
-      select: "firstname lastname",
+      // reciver: userId,
     });
 
     await Chat.findByIdAndUpdate(req.body.chatId, {
       latestMessage: newMessage,
     });
-    res.status(200).json({
-      newMessage,
+
+    newMessage = await newMessage.populate("sender");
+    newMessage = await newMessage.populate("chat");
+    newMessage = await User.populate(newMessage, {
+      path: "chat.latestMessage ",
+      select: "content",
     });
+    newMessage = await User.populate(newMessage, {
+      path: "chat.members ",
+      select: "firstname lastname",
+    });
+
+    res.status(200).json(newMessage);
   } catch (error) {
     res.status(500).json({
       message: error.message,
