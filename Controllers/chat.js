@@ -1,6 +1,8 @@
 const User = require("../Models/User");
 const Chat = require("../Models/Chat");
 
+
+// this is first request the front call it which return all chat that user make it ✅
 const getChats = async (req, res, next) => {
   try {
     const { id } = req.user;
@@ -12,9 +14,9 @@ const getChats = async (req, res, next) => {
         message: "User Not Found",
       });
 
-    const chat = await Chat.find({ members: id }, "-__v")
+    const chat = await Chat.find({ members: id }, "-__v -createdAt -updatedAt")
       .populate("members", "_id email firstname lastname")
-      .populate("latestMessage", "content");
+      .populate("latestMessage", "content -_id");
     // console.log(chat);
     if (!chat.length) return res.status(204).json();
 
@@ -33,11 +35,11 @@ const getChats = async (req, res, next) => {
   }
 };
 
-const createGroup = async (req, res, next) => {
+const createChat = async (req, res, next) => {
   try {
     const { id } = req.user;
 
-    const { name, isGroup, members } = req.body;
+    const { name, members } = req.body;
     // console.log({name , isGroup , members});
     // console.log(id);
 
@@ -48,13 +50,11 @@ const createGroup = async (req, res, next) => {
         message: "User Not Found",
       });
 
-    if (!isGroup)
-      return res.status(400).json({ message: "Should be Group is true" });
+      if(!members.length) return res.status(400).json({ message:"Must chat has members"})
 
     members.push(id);
     const chat = await Chat.create({
       name,
-      isGroup,
       members,
     });
 
@@ -70,12 +70,15 @@ const createGroup = async (req, res, next) => {
   }
 };
 
+// change it which can fetch groups that user find in and get only groups not private chat (i think that we will n't need it !)✅
 const getGroups = async (req, res, next) => {
   try {
-    const groups = await Chat.where("isGroup")
-      .equals(true)
+    const { id } = req.user;
+    const groups = await Chat.find({$and:[
+      {"members.2":{$exists:true}},
+    {members:id}]},"-createdAt -updatedAt -__v")
       .populate("members", "_id email firstname lastname")
-      .populate("latestMessage", "content");
+      .populate("latestMessage", "content -_id");
     res.status(200).json({
       groups,
     });
@@ -88,6 +91,6 @@ const getGroups = async (req, res, next) => {
 
 module.exports = {
   getChats,
-  createGroup,
+  createChat,
   getGroups,
 };

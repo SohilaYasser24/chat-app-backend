@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
+// remove createdAt property ✅
 const Message = new mongoose.Schema(
   {
     content: {
@@ -20,10 +21,6 @@ const Message = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Chat",
       required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
     },
   },
   { timestamps: true }

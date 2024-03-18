@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// remove IsGroup from validation Joi Schema ✅
 const chatValidation = Joi.object({
   name: Joi.string().required().messages({
     "string.empty": "Name is required",
@@ -7,7 +8,6 @@ const chatValidation = Joi.object({
   members: Joi.array().required().messages({
     "string.empty": "Members is required",
   }),
-  isGroup: Joi.boolean().required(),
   _id: Joi.required(),
 });
 

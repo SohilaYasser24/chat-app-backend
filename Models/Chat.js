@@ -1,14 +1,12 @@
 const mongoose = require("mongoose");
 
+
+// remove isGroup property ✅
 const chatSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-    },
-    isGroup: {
-      type: Boolean,
-      default: false,
     },
     latestMessage: {
       type: mongoose.Schema.Types.ObjectId,
