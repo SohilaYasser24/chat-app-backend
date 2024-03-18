@@ -1,6 +1,6 @@
 const User = require("../Models/User");
 const Chat = require("../Models/Chat");
-
+const { chatValidation } = require("../Validators/chat");
 
 // this is first request the front call it which return all chat that user make it ✅
 const getChats = async (req, res, next) => {
@@ -40,6 +40,20 @@ const createChat = async (req, res, next) => {
     const { id } = req.user;
 
     const { name, members } = req.body;
+
+    const validation = chatValidation.validate(req.body);
+
+    if (validation.error) {
+      let errorMessage = "";
+      for (const err of validation.error.details) {
+        errorMessage += `${err.path.join(" > ")} ${err.message.slice(
+          err.message.lastIndexOf('"') + 1
+        )}`;
+      }
+      return res.status(400).json({
+        message: errorMessage,
+      });
+    }
     // console.log({name , isGroup , members});
     // console.log(id);
 
@@ -50,7 +64,8 @@ const createChat = async (req, res, next) => {
         message: "User Not Found",
       });
 
-      if(!members.length) return res.status(400).json({ message:"Must chat has members"})
+    if (!members.length)
+      return res.status(400).json({ message: "Must chat has members" });
 
     members.push(id);
     const chat = await Chat.create({
@@ -74,9 +89,10 @@ const createChat = async (req, res, next) => {
 const getGroups = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const groups = await Chat.find({$and:[
-      {"members.2":{$exists:true}},
-    {members:id}]},"-createdAt -updatedAt -__v")
+    const groups = await Chat.find(
+      { $and: [{ "members.2": { $exists: true } }, { members: id }] },
+      "-createdAt -updatedAt -__v"
+    )
       .populate("members", "_id email firstname lastname")
       .populate("latestMessage", "content -_id");
     res.status(200).json({

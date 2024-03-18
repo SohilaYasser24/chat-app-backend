@@ -4,10 +4,12 @@ const messageValidation = Joi.object({
   content: Joi.string().required().messages({
     "string.empty": "Content is required",
   }),
-  sender: Joi.object().required(),
-  chat: Joi.object().required(),
-  createdAt: Joi.date().required(),
-  _id: Joi.object().required(),
+  sender: Joi.object().required().messages({
+    "string.empty": "Sender is required",
+  }),
+  chat: Joi.object().required().messages({
+    "string.empty": "Chat is required",
+  }),
 });
 
 module.exports = { messageValidation };

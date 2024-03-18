@@ -8,7 +8,6 @@ const chatValidation = Joi.object({
   members: Joi.array().required().messages({
     "string.empty": "Members is required",
   }),
-  _id: Joi.required(),
 });
 
 module.exports = { chatValidation };

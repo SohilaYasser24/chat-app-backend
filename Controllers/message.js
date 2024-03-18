@@ -1,6 +1,7 @@
 const Chat = require("../Models/Chat");
 const User = require("../Models/User");
 const Message = require("../Models/Message");
+const { messageValidation } = require("../Validators/message");
 
 const getMessages = async (req, res, next) => {
   const { chat_, page_ } = req.query;
@@ -34,6 +35,20 @@ const getMessages = async (req, res, next) => {
 const setMessages = async (req, res, next) => {
   try {
     const { content, chatId, userId } = req.body;
+
+    const validation = messageValidation.validate(req.body);
+
+    if (validation.error) {
+      let errorMessage = "";
+      for (const err of validation.error.details) {
+        errorMessage += `${err.path.join(" > ")} ${err.message.slice(
+          err.message.lastIndexOf('"') + 1
+        )}`;
+      }
+      return res.status(400).json({
+        message: errorMessage,
+      });
+    }
 
     // if (userId && !chatId) {
     //   const chat = await Chat.create({
