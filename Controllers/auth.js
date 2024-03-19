@@ -68,6 +68,8 @@ exports.login = async (req, res, next) => {
       });
     }
 
+    const { _id, firstname, lastname, image } = user;
+
     const token = signToken(
       user._id,
       user.firstname,
@@ -77,8 +79,12 @@ exports.login = async (req, res, next) => {
       user.password
     );
     res.status(200).json({
-      status: "Login successfully",
       token,
+      _id,
+      firstname,
+      lastname,
+      image,
+      email,
     });
     next();
   } catch (error) {
