@@ -85,6 +85,51 @@ const createChat = async (req, res, next) => {
   }
 };
 
+const createPrivateChat = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+
+    const recevierId = req.params.recieverId;
+    const name = id + " " + recevierId;
+
+    const { members } = req.body;
+
+    // just to ensure that there are anyuser with that id
+    const user = await User.findById(id);
+    if (!user)
+      return res.status(404).json({
+        message: "User Not Found",
+      });
+
+    if (!members.length)
+      return res.status(400).json({ message: "Must chat has members" });
+
+    const chat = await Chat.findOne({ name });
+    let newChat;
+    if (chat) {
+      return res.json({
+        chat,
+      });
+    } else {
+      members.push(id);
+      newChat = await Chat.create({
+        name,
+        members,
+      });
+    }
+
+    res.status(201).json({
+      message: "Created Chat Successfully",
+      newChat,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Process Failed",
+      error: error.message,
+    });
+  }
+};
+
 // change it which can fetch groups that user find in and get only groups not private chat (i think that we will n't need it !)✅
 const getGroups = async (req, res, next) => {
   try {
@@ -108,5 +153,6 @@ const getGroups = async (req, res, next) => {
 module.exports = {
   getChats,
   createChat,
+  createPrivateChat,
   getGroups,
 };
