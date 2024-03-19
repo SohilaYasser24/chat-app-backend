@@ -80,11 +80,14 @@ exports.login = async (req, res, next) => {
     );
     res.status(200).json({
       token,
-      _id,
-      firstname,
-      lastname,
-      image,
-      email,
+      data:{
+        _id,
+        firstname,
+        lastname,
+        image,
+        email,
+      }
+   
     });
     next();
   } catch (error) {
