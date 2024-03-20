@@ -17,7 +17,7 @@ const getChats = async (req, res, next) => {
     const chat = await Chat.find({ members: id }, "-__v -createdAt -updatedAt")
       .populate("members", "_id email firstname lastname image")
       .populate("latestMessage", "content -_id");
-    // console.log(chat);
+    console.log(chat);
     if (!chat.length) return res.status(204).json();
 
     res.status(200).json({
@@ -90,7 +90,13 @@ const createPrivateChat = async (req, res, next) => {
     const { id } = req.user;
 
     const recevierId = req.params.recieverId;
-    const name = id + " " + recevierId;
+    const recevierData = await User.findById(recevierId);
+    if (!recevierData)
+      return res.status(404).json({
+        message: "Receiver Not Found",
+      });
+
+    const name = recevierData.firstname + " " + recevierData.lastname;
 
     const { members } = req.body;
 

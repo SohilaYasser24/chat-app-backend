@@ -14,7 +14,7 @@ const getMessages = async (req, res, next) => {
     if (chat_ && page_) {
       const messages = await Message.find({ chat: chat_ }, "-__v")
         .sort({ createdAt: "desc" })
-        .populate("sender", "_id email firstname lastname image" )
+        .populate("sender", "_id email firstname lastname image")
         .skip(page_ * 10)
         .limit(10);
 
@@ -31,6 +31,25 @@ const getMessages = async (req, res, next) => {
     res.status(500).json({
       message: "Process Failed",
       error: error.message,
+    });
+  }
+};
+
+const getAllMessages = async (req, res, next) => {
+  try {
+    const chatId = req.params.chatId;
+
+    const allMessages = await Message.find({ chat: chatId }, "-__v")
+      .sort({ createdAt: "desc" })
+      .populate("sender", "firstname lastname")
+      .populate("chat");
+
+    res.status(200).json({
+      allMessages,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
     });
   }
 };
@@ -146,6 +165,7 @@ const editMessage = async (req, res, next) => {
 
 module.exports = {
   getMessages,
+  getAllMessages,
   setMessages,
   deleteMessage,
   editMessage,
