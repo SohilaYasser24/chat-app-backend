@@ -14,6 +14,6 @@ const { protect } = require("../Middlewares/auth");
 router.get("/", protect, getChats);
 router.get("/fetchAllGroups", protect, getGroups);
 router.post("/", protect, createChat);
-router.post("/:recieverId", protect, createPrivateChat);
+router.post("/privateChat/:recieverId", protect, createPrivateChat);
 
 module.exports = router;
