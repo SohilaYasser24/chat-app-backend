@@ -9,4 +9,10 @@ const messageValidation = Joi.object({
   }),
 });
 
-module.exports = { messageValidation };
+const editMessageValidation = Joi.object({
+  content: Joi.string().required().messages({
+    "string.empty": "Content is required",
+  }),
+});
+
+module.exports = { messageValidation, editMessageValidation };
