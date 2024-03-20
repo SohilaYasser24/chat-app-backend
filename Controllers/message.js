@@ -1,7 +1,10 @@
 const Chat = require("../Models/Chat");
 const User = require("../Models/User");
 const Message = require("../Models/Message");
-const { messageValidation } = require("../Validators/message");
+const {
+  messageValidation,
+  editMessageValidation,
+} = require("../Validators/message");
 
 const getMessages = async (req, res, next) => {
   const { chat_, page_ } = req.query;
@@ -79,7 +82,71 @@ const setMessages = async (req, res, next) => {
   }
 };
 
+const deleteMessage = async (req, res, next) => {
+  try {
+    const messageId = req.params.messageId;
+
+    const messageData = await Message.findByIdAndDelete(messageId);
+    if (!messageData) {
+      return res.status(404).json({
+        message: "Message not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Message deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const editMessage = async (req, res, next) => {
+  try {
+    const messageId = req.params.messageId;
+
+    const { content } = req.body;
+
+    const validation = editMessageValidation.validate(req.body);
+
+    if (validation.error) {
+      let errorMessage = "";
+      for (const err of validation.error.details) {
+        errorMessage += `${err.path.join(" > ")} ${err.message.slice(
+          err.message.lastIndexOf('"') + 1
+        )}`;
+      }
+      return res.status(400).json({
+        message: errorMessage,
+      });
+    }
+
+    const updatedMessage = { content };
+
+    const messageData = await Message.findByIdAndUpdate(
+      messageId,
+      updatedMessage,
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({
+      message: "Update message successfull",
+      messageData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getMessages,
   setMessages,
+  deleteMessage,
+  editMessage,
 };

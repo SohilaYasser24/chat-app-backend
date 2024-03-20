@@ -1,9 +1,9 @@
 const User = require("../Models/User");
 const signToken = require("../Utils/signToken");
-const { userValidation } = require("../Validators/user");
+const { userValidation, updateUserValidation } = require("../Validators/user");
 const bcrypt = require("bcryptjs");
 
-exports.signUp = async (req, res, next) => {
+const signUp = async (req, res, next) => {
   try {
     const { firstname, lastname, email, image, password } = req.body;
 
@@ -50,7 +50,7 @@ exports.signUp = async (req, res, next) => {
   }
 };
 
-exports.login = async (req, res, next) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -80,14 +80,13 @@ exports.login = async (req, res, next) => {
     );
     res.status(200).json({
       token,
-      data:{
+      data: {
         _id,
         firstname,
         lastname,
         image,
         email,
-      }
-   
+      },
     });
     next();
   } catch (error) {
@@ -97,3 +96,63 @@ exports.login = async (req, res, next) => {
     });
   }
 };
+
+const userDetails = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+
+    const userData = await User.findById(id);
+    res.status(201).json({
+      userData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const updateUser = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    let { firstname, lastname, email, image, password } = req.body;
+
+    const validation = updateUserValidation.validate(req.body);
+
+    if (validation.error) {
+      let errorMessage = "";
+      for (const err of validation.error.details) {
+        errorMessage += `${err.path.join(" > ")} ${err.message.slice(
+          err.message.lastIndexOf('"') + 1
+        )}`;
+      }
+      return res.status(400).json({
+        message: errorMessage,
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 7);
+    const updatedData = {
+      firstname,
+      lastname,
+      email,
+      image,
+      password: hashedPassword,
+    };
+
+    const userData = await User.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+
+    res.status(201).json({
+      message: "Update user successfull",
+      userData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { signUp, login, userDetails, updateUser };
