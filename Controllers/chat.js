@@ -15,7 +15,7 @@ const getChats = async (req, res, next) => {
       });
 
     const chat = await Chat.find({ members: id }, "-__v -createdAt -updatedAt")
-      .populate("members", "_id email firstname lastname")
+      .populate("members", "_id email firstname lastname image")
       .populate("latestMessage", "content -_id");
     // console.log(chat);
     if (!chat.length) return res.status(204).json();

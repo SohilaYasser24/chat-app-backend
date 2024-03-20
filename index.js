@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
       });
 
     // console.log({ userId });
-    // console.log(onlineUsers);
+    console.log(onlineUsers);
     io.emit("getUsersOnLine", onlineUsers);
   });
 
