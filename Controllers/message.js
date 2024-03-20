@@ -14,7 +14,7 @@ const getMessages = async (req, res, next) => {
     if (chat_ && page_) {
       const messages = await Message.find({ chat: chat_ }, "-__v")
         .sort({ createdAt: "desc" })
-        .populate("sender", "_id email firstname lastname")
+        .populate("sender", "_id email firstname lastname image" )
         .skip(page_ * 10)
         .limit(10);
 
