@@ -21,6 +21,12 @@ app.use(express.json());
 
 app.use(API, apiRoute);
 
+app.use("*", (req, res, next) => {
+  return res.status(400).json({
+    message: `Can't find ${req.originalUrl} on this server`,
+  });
+});
+
 // change user which from /user to /auth because there are endpoitn with the same name
 
 connect();
