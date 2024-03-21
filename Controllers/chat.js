@@ -111,7 +111,11 @@ const createPrivateChat = async (req, res, next) => {
     let newChat;
     if (chat) {
       return res.json({
-        chat,
+        chat:{
+          _id:newChat._id,
+          members:newChat.members,
+          name:newChat.name,
+        },
       });
     } else {
       newChat = await Chat.create({
