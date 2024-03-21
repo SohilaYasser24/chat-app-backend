@@ -112,8 +112,8 @@ const createPrivateChat = async (req, res, next) => {
     if (chat) {
       return res.json({
         chat:{
-          name: chat.name,
           _id: chat._id,
+          name: chat.name,
           members: chat.members
         },
       });
@@ -127,8 +127,8 @@ const createPrivateChat = async (req, res, next) => {
     res.status(201).json({
       message: "Created Chat Successfully",
       chat: {
-        name: newChat.name,
         _id: newChat._id,
+        name: newChat.name,
         members: newChat.members,
       },
     });
