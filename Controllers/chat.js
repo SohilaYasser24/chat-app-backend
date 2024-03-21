@@ -89,6 +89,13 @@ const createPrivateChat = async (req, res, next) => {
   try {
     const { id } = req.user;
 
+    // just to ensure that there are anyuser with that id
+    const user = await User.findById(id);
+    if (!user)
+      return res.status(404).json({
+        message: "User Not Found",
+      });
+
     const recevierId = req.params.recieverId;
     const recevierData = await User.findById(recevierId);
     if (!recevierData)
@@ -98,14 +105,9 @@ const createPrivateChat = async (req, res, next) => {
 
     const name = recevierData.firstname + " " + recevierData.lastname;
 
-    // just to ensure that there are anyuser with that id
-    const user = await User.findById(id);
-    if (!user)
-      return res.status(404).json({
-        message: "User Not Found",
-      });
+    const members = [id, recevierId];
 
-    const chat = await Chat.findOne({ name });
+    const chat = await Chat.findOne({ members: { $all: members, $size: 2 } });
     let newChat;
     if (chat) {
       return res.json({
@@ -114,7 +116,7 @@ const createPrivateChat = async (req, res, next) => {
     } else {
       newChat = await Chat.create({
         name,
-        members: [recevierId, id],
+        members,
       });
     }
 
