@@ -75,7 +75,11 @@ const createGroupChat = async (req, res, next) => {
 
     res.status(201).json({
       message: "Created Chat Group Successfully",
-      chat,
+      chat:{
+        _id: chat._id,
+        name: chat.name,
+        members: chat.members
+      },
     });
   } catch (error) {
     res.status(500).json({
