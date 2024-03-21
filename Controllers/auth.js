@@ -41,7 +41,6 @@ const signUp = async (req, res, next) => {
     res.status(201).json({
       status: "Registration successfully",
     });
-    next();
   } catch (error) {
     res.status(500).json({
       message: "Registration Failed",
@@ -88,7 +87,6 @@ const login = async (req, res, next) => {
         email,
       },
     });
-    next();
   } catch (error) {
     res.status(500).json({
       message: "Login Failed",
