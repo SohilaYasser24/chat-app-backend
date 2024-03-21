@@ -35,7 +35,7 @@ const getChats = async (req, res, next) => {
   }
 };
 
-const createChat = async (req, res, next) => {
+const createGroupChat = async (req, res, next) => {
   try {
     const { id } = req.user;
 
@@ -98,17 +98,12 @@ const createPrivateChat = async (req, res, next) => {
 
     const name = recevierData.firstname + " " + recevierData.lastname;
 
-    const { members } = req.body;
-
     // just to ensure that there are anyuser with that id
     const user = await User.findById(id);
     if (!user)
       return res.status(404).json({
         message: "User Not Found",
       });
-
-    if (!members.length)
-      return res.status(400).json({ message: "Must chat has members" });
 
     const chat = await Chat.findOne({ name });
     let newChat;
@@ -117,10 +112,9 @@ const createPrivateChat = async (req, res, next) => {
         chat,
       });
     } else {
-      members.push(id);
       newChat = await Chat.create({
         name,
-        members,
+        members: [recevierId, id],
       });
     }
 
@@ -158,7 +152,7 @@ const getGroups = async (req, res, next) => {
 
 module.exports = {
   getChats,
-  createChat,
+  createGroupChat,
   createPrivateChat,
   getGroups,
 };

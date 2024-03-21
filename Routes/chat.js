@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   getChats,
   getGroups,
-  createChat,
+  createGroupChat,
   createPrivateChat,
 } = require("../Controllers/chat");
 const { protect } = require("../Middlewares/auth");
@@ -13,7 +13,7 @@ const { protect } = require("../Middlewares/auth");
 // Note which we use protect funcation, we can use it in index.js in middelware 📝
 router.get("/", protect, getChats);
 router.get("/fetchAllGroups", protect, getGroups);
-router.post("/", protect, createChat);
+router.post("/groupChat", protect, createGroupChat);
 router.post("/privateChat/:recieverId", protect, createPrivateChat);
 
 module.exports = router;
