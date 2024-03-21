@@ -122,7 +122,11 @@ const createPrivateChat = async (req, res, next) => {
 
     res.status(201).json({
       message: "Created Chat Successfully",
-      chat:newChat,
+      chat:{
+        _id:newChat._id,
+        members:newChat.members,
+        name:newChat.name,
+      },
     });
   } catch (error) {
     res.status(500).json({
