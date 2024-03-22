@@ -113,7 +113,7 @@ const userDetails = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     const { id } = req.user;
-    let { firstname, lastname, email, image, password } = req.body;
+    let { firstname, lastname, email, image /* , password */ } = req.body;
 
     const validation = updateUserValidation.validate(req.body);
 
@@ -135,7 +135,7 @@ const updateUser = async (req, res, next) => {
       lastname,
       email,
       image,
-      password,
+      // password: hashedPassword,
     };
 
     const userData = await User.findByIdAndUpdate(id, updatedData, {
