@@ -54,18 +54,18 @@ io.on("connection", (socket) => {
       });
 
     // console.log({ userId });
-    console.log(onlineUsers);
+    // console.log(onlineUsers);
     io.emit("getUsersOnLine", onlineUsers);
   });
 
   socket.on("joinChat", (chatId) => {
     socket.join(chatId);
-    // console.log("join chat successfull");
+    // console.log("join chat successfull",chatId);
     // io.to(chatId).emit("getMessage", "hello");
   });
 
-  socket.on("sendMessage", (newMessage, chatId) => {
-    io.to(chatId).emit("getMessage", newMessage);
+  socket.on("sendMessage", (newMessage, chatId , sender) => {
+    io.to(chatId).emit("getMessage", newMessage , sender);
 
     // console.log(newMessage);
   });
