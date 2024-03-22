@@ -75,10 +75,10 @@ const createGroupChat = async (req, res, next) => {
 
     res.status(201).json({
       message: "Created Chat Group Successfully",
-      chat:{
+      chat: {
         _id: chat._id,
         name: chat.name,
-        members: chat.members
+        members: chat.members,
       },
     });
   } catch (error) {
@@ -107,7 +107,7 @@ const createPrivateChat = async (req, res, next) => {
         message: "Receiver Not Found",
       });
 
-    const name = recevierData.firstname + " " + recevierData.lastname;
+    const name = recevierData.firstname + " " + user.firstname;
 
     const members = [id, recevierId];
 
@@ -115,10 +115,10 @@ const createPrivateChat = async (req, res, next) => {
     let newChat;
     if (chat) {
       return res.json({
-        chat:{
+        chat: {
           _id: chat._id,
           name: chat.name,
-          members: chat.members
+          members: chat.members,
         },
       });
     } else {
