@@ -129,13 +129,13 @@ const updateUser = async (req, res, next) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 7);
+    // const hashedPassword = await bcrypt.hash(password, 7);
     const updatedData = {
       firstname,
       lastname,
       email,
       image,
-      password: hashedPassword,
+      password,
     };
 
     const userData = await User.findByIdAndUpdate(id, updatedData, {
