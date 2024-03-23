@@ -107,7 +107,14 @@ const createPrivateChat = async (req, res, next) => {
         message: "Receiver Not Found",
       });
 
-    const name = recevierData.firstname + " " + user.firstname;
+    const name =
+      recevierData.firstname +
+      " " +
+      recevierData.lastname +
+      " & " +
+      user.firstname +
+      " " +
+      user.lastname;
 
     const members = [id, recevierId];
 
