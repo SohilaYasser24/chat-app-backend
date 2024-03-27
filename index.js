@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (newMessage, chatId , sender) => {
-    io.to(chatId).emit("getMessage", newMessage , sender);
+    io.to(chatId).emit("getMessage", newMessage , sender , chatId);
 
     // console.log(newMessage);
   });
