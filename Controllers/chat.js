@@ -171,9 +171,40 @@ const getGroups = async (req, res, next) => {
   }
 };
 
+const exitGroup = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { chatId } = req.body;
+
+    const chat = await Chat.findById(chatId);
+
+    if (chat.members.includes(id)) {
+      await Chat.findOneAndUpdate(
+        { _id: chatId },
+        { $pull: { members: id } },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        message: "User exit from group successfully",
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ error: "User is not a member of this chat" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Process Failed",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getChats,
   createGroupChat,
   createPrivateChat,
   getGroups,
+  exitGroup,
 };
