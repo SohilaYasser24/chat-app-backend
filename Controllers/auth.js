@@ -113,7 +113,7 @@ const userDetails = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     const { id } = req.user;
-    let { firstname, lastname, email, image, password } = req.body;
+    let { firstname, lastname, email, image /* , password */ } = req.body;
 
     const validation = updateUserValidation.validate(req.body);
 
@@ -129,13 +129,13 @@ const updateUser = async (req, res, next) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 7);
+    // const hashedPassword = await bcrypt.hash(password, 7);
     const updatedData = {
       firstname,
       lastname,
       email,
       image,
-      password: hashedPassword,
+      // password: hashedPassword,
     };
 
     const userData = await User.findByIdAndUpdate(id, updatedData, {
@@ -153,4 +153,25 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, login, userDetails, updateUser };
+const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found!",
+      });
+    }
+
+    return res.status(200).json({
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { signUp, login, userDetails, updateUser, deleteUser };
